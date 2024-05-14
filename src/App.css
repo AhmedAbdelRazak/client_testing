@@ -3,3 +3,26 @@ body {
   margin: 0px;
   box-sizing: border-box;
 }
+
+.submenu-item-enter {
+  opacity: 0;
+  transform: translateY(-20px);
+}
+.submenu-item-enter-active {
+  opacity: 1;
+  transform: translateY(0);
+  transition:
+    opacity 0.3s ease,
+    transform 0.3s ease;
+}
+.submenu-item-exit {
+  opacity: 1;
+  transform: translateY(0);
+}
+.submenu-item-exit-active {
+  opacity: 0;
+  transform: translateY(-20px);
+  transition:
+    opacity 0.3s ease,
+    transform 0.3s ease;
+}

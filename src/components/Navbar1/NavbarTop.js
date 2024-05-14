@@ -6,7 +6,7 @@ import Sidebar from "./Sidebar";
 
 const NavbarTop = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const [activeLink, setActiveLink] = useState("home");
+  const [activeLink, setActiveLink] = useState("");
 
   const handleNavLinkClick = (link) => {
     setActiveLink(link);
@@ -18,11 +18,23 @@ const NavbarTop = () => {
       {isSidebarOpen && <Overlay onClick={() => setIsSidebarOpen(false)} />}
       <NavbarTopWrapper>
         <MenuIcon onClick={() => setIsSidebarOpen(true)} />
-        <Logo
-          src="https://res.cloudinary.com/infiniteapps/image/upload/v1715298782/serene_janat/1715298781714.png"
-          alt="Logo"
+        <div
+          style={{
+            fontWeight: "bolder",
+            fontSize: "2.5rem",
+            letterSpacing: "4px",
+            color: "white",
+            cursor: "pointer",
+          }}
           onClick={() => (window.location.href = "/")}
-        />
+        >
+          Arvato
+        </div>
+        {/* <Logo
+          src="https://arvato-supply-chain.com/typo3conf/ext/ui_sitepackage/Resources/Public/assets/img/scm_neu.svg"
+          alt="Arvato Logo"
+          onClick={() => (window.location.href = "/")}
+        /> */}
         <NavLinks>
           <NavLink href="/login">Login</NavLink>
           <NavLink href="/signup">Register</NavLink>
@@ -71,6 +83,7 @@ const NavbarTopWrapper = styled.nav`
   }
 `;
 
+// eslint-disable-next-line
 const Logo = styled.img`
   height: 50px; // Adjust based on your logo's aspect ratio
   cursor: pointer;

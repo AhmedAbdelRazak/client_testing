@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { AiOutlineShoppingCart } from "react-icons/ai"; // Import for cart icon
 
 const NavbarBottom = () => {
-  const [clickedLink, setClickedLink] = useState("home");
+  const [clickedLink, setClickedLink] = useState("");
 
   useEffect(() => {
     const handleLocationChange = () => {

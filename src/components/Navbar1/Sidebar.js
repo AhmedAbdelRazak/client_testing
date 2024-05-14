@@ -56,8 +56,8 @@ const Sidebar = ({
       <CloseIcon onClick={() => setIsSidebarOpen(false)} />
       <Logo isOpen={isSidebarOpen}>
         <img
-          src="https://res.cloudinary.com/infiniteapps/image/upload/v1715298782/serene_janat/1715298781714.png"
-          alt="Logo"
+          src="https://arvato-supply-chain.com/typo3conf/ext/ui_sitepackage/Resources/Public/assets/img/scm_neu.svg"
+          alt="Arvato Logo"
         />
       </Logo>
       <HorizontalLine />
