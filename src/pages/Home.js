@@ -13,4 +13,5 @@ export default Home;
 
 const HomeWrapper = styled.div`
   min-height: 1600px;
+  padding-top: 80px;
 `;

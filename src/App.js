@@ -15,6 +15,7 @@ import Navbar2 from "./components/Navbar2/Navbar2";
 // eslint-disable-next-line
 import Navbar3 from "./components/Navbar3/Navbar3";
 import Navbar4 from "./components/Navbar4/Navbar4";
+import About from "./pages/About";
 
 //Admin Management
 
@@ -30,6 +31,7 @@ const App = () => {
       <Switch>
         <div style={{ minHeight: "1400px" }}>
           <Route path="/" exact component={Home} />
+          <Route path="/about" exact component={About} />
         </div>
       </Switch>
     </BrowserRouter>

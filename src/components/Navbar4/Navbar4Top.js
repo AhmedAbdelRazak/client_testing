@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Drawer } from "antd";
 import { Link, useLocation } from "react-router-dom";
 import styled from "styled-components";
@@ -10,10 +10,22 @@ import {
 
 const Navbar4Top = ({ toggleDrawer }) => {
   const [isCartOpen, setIsCartOpen] = useState(false);
+  const [scrollY, setScrollY] = useState(0);
   const location = useLocation();
 
+  const handleScroll = () => {
+    setScrollY(window.scrollY);
+  };
+
+  useEffect(() => {
+    window.addEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
+
   return (
-    <TopNavbar>
+    <TopNavbar scrollY={scrollY}>
       <MenuIcon onClick={toggleDrawer} />
       <Logo href="/">Arvato</Logo>
       <CartIconSmallScreen onClick={() => setIsCartOpen(true)} />
@@ -55,11 +67,17 @@ const TopNavbar = styled.div`
   padding: 0 5rem;
   color: #fff;
   height: 64px;
-  background-color: #2b2b2b !important;
+  background-color: ${({ scrollY }) =>
+    scrollY > 50 ? "#4d4d4d" : "#2b2b2b"} !important;
+  transition: background-color 0.3s ease;
 
   @media (max-width: 768px) {
     padding: 0 1rem;
     justify-content: space-between;
+    position: fixed; /* Make sticky on mobile */
+    top: 0;
+    width: 100%;
+    z-index: 1000;
   }
 `;
 
@@ -102,10 +120,6 @@ const StyledLink = styled(Link)`
     background-color: #444;
     color: #fff;
   }
-
-  // &.active {
-  //   border-bottom: 3px solid #e2e2e2 !important;
-  // }
 `;
 
 const CartIconSmallScreen = styled(AiOutlineShoppingCart)`
