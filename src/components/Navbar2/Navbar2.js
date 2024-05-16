@@ -169,7 +169,7 @@ const NavbarWrapper = styled.nav`
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
   position: fixed;
   width: 100%;
-  top: 150px;
+  top: 0px;
   z-index: 1000;
 
   @media (max-width: 768px) {
