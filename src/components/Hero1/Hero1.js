@@ -1,4 +1,3 @@
-// src/components/Hero1.js
 import React, { useRef, useState, useEffect } from "react";
 import { Canvas, useFrame, useLoader } from "@react-three/fiber";
 import * as THREE from "three";
@@ -10,7 +9,7 @@ import WinkingEmoji from "./WinkingEmoji"; // Importing the SVG component
 const glow = keyframes`
   from {
     text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #a0a0a0,
-                 0 0 40px #a0a0a0, 0 0 50px #a0a0a0, 0 0 60px #a0a0a0,
+                 0 0 20px #a0a0a0, 0 0 50px #a0a0a0, 0 0 60px #a0a0a0,
                  0 0 70px #a0a0a0;
   }
   to {
@@ -20,10 +19,35 @@ const glow = keyframes`
   }
 `;
 
+// Keyframes for star blinking effect
+const blink = keyframes`
+  0%, 100% {
+    opacity: 0.2;
+  }
+  50% {
+    opacity: 1;
+  }
+`;
+
+// Function to generate random blink animation delays for stars
+const getRandomDelay = () => `${Math.random() * 2}s`;
+
 const Hero1 = () => {
   return (
     <HeroContainer>
       {/* The Canvas component from @react-three/fiber to render 3D content */}
+      <Stars>
+        {Array.from({ length: 20 }).map((_, index) => (
+          <Star
+            key={index}
+            style={{
+              top: `${Math.random() * 100}%`,
+              left: `${Math.random() * 100}%`,
+              animationDelay: getRandomDelay(),
+            }}
+          />
+        ))}
+      </Stars>
       <StyledCanvas>
         <ambientLight intensity={0.5} />{" "}
         {/* Ambient light for overall illumination */}
@@ -40,26 +64,25 @@ const Hero1 = () => {
 };
 
 const ShapeSequence = () => {
-  const [visibleShapes, setVisibleShapes] = useState([false, false, false]);
+  const [allShapesVisible, setAllShapesVisible] = useState(true);
 
   useEffect(() => {
-    const timers = [
-      setTimeout(() => setVisibleShapes([true, false, false]), 1500),
-      setTimeout(() => setVisibleShapes([true, true, false]), 3500),
-      setTimeout(() => setVisibleShapes([true, true, true]), 5500),
-    ];
-    return () => timers.forEach(clearTimeout);
+    const timer = setTimeout(() => {
+      setAllShapesVisible(true);
+    }, 1000);
+
+    return () => clearTimeout(timer);
   }, []);
 
   return (
     <>
-      <ShapeWrapper isVisible={visibleShapes[0]} position={[-3.5, 0, 0]}>
+      <ShapeWrapper isVisible={allShapesVisible} position={[-3.5, 0, 0]}>
         <RotatingCube />
       </ShapeWrapper>
-      <ShapeWrapper isVisible={visibleShapes[1]} position={[0, 0, 0]}>
+      <ShapeWrapper isVisible={allShapesVisible} position={[0, 0, 0]}>
         <RotatingPyramid />
       </ShapeWrapper>
-      <ShapeWrapper isVisible={visibleShapes[2]} position={[3.5, 0, 0]}>
+      <ShapeWrapper isVisible={allShapesVisible} position={[3.5, 0, 0]}>
         <RotatingCylinder />
       </ShapeWrapper>
     </>
@@ -70,7 +93,7 @@ const ShapeWrapper = ({ isVisible, children, position }) => {
   return (
     <group position={position}>
       <meshStandardMaterial opacity={isVisible ? 1 : 0} transparent />
-      <mesh position={position}>
+      <mesh position={position} style={{ transition: "opacity 3s" }}>
         {React.cloneElement(children, { visible: isVisible })}
       </mesh>
     </group>
@@ -80,6 +103,10 @@ const ShapeWrapper = ({ isVisible, children, position }) => {
 const RotatingCube = ({ visible }) => {
   const meshRef = useRef();
   const texture = useLoader(THREE.TextureLoader, CrystalImage);
+
+  // Repeat the texture to cover the entire shape
+  texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
+  texture.repeat.set(1, 1);
 
   // Animation loop for rotating the cube
   useFrame(() => {
@@ -103,6 +130,10 @@ const RotatingPyramid = ({ visible }) => {
   const meshRef = useRef();
   const texture = useLoader(THREE.TextureLoader, CrystalImage);
 
+  // Repeat the texture to cover the entire shape
+  texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
+  texture.repeat.set(1, 1);
+
   // Animation loop for rotating the pyramid
   useFrame(() => {
     if (meshRef.current) {
@@ -124,6 +155,10 @@ const RotatingPyramid = ({ visible }) => {
 const RotatingCylinder = ({ visible }) => {
   const meshRef = useRef();
   const texture = useLoader(THREE.TextureLoader, CrystalImage);
+
+  // Repeat the texture to cover the entire shape
+  texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
+  texture.repeat.set(1, 1);
 
   // Animation loop for rotating the cylinder
   useFrame(() => {
@@ -153,8 +188,27 @@ const HeroContainer = styled.div`
   flex-direction: column; /* Column layout */
   align-items: center; /* Center alignment */
   justify-content: center; /* Center alignment */
-  background-color: #000; /* Black background */
+  background-color: #141414; /* Dark background */
   position: relative; /* Relative positioning for absolute children */
+`;
+
+// Container for stars
+const Stars = styled.div`
+  position: absolute; /* Absolute positioning */
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: hidden; /* Hide overflow */
+`;
+
+// Styled component for individual star
+const Star = styled.div`
+  position: absolute; /* Absolute positioning */
+  width: 2px; /* Star size */
+  height: 2px; /* Star size */
+  background-color: white; /* Star color */
+  border-radius: 50%; /* Round shape */
+  opacity: 0.2; /* Initial opacity */
+  animation: ${blink} 2s infinite; /* Blinking animation */
 `;
 
 // Styled Canvas component

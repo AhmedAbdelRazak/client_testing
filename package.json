@@ -46,6 +46,7 @@
     "react-to-print": "^2.14.15",
     "react-toastify": "^10.0.4",
     "react-transition-group": "^4.4.5",
+    "react-wavify": "^1.10.0",
     "slick-carousel": "^1.8.1",
     "styled-components": "^6.1.8",
     "three": "^0.164.1",
