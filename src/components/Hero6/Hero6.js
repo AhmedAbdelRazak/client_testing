@@ -1,31 +1,18 @@
-import React, { useRef, useEffect } from "react";
+import React, { useRef } from "react";
 import { Canvas, useFrame, useLoader } from "@react-three/fiber";
 import * as THREE from "three";
 import styled, { keyframes } from "styled-components";
 import CrystalImage from "../../images/CrystalImage.png";
-import WinkingEmoji from "../Hero5/WinkingEmoji";
 
-// Main Hero5 component
-const Hero5 = () => {
-  // Use useEffect to set up star animations
-  useEffect(() => {
-    const stars = document.querySelectorAll(".star");
-    stars.forEach((star) => {
-      const duration = Math.random() * 1.5 + 0.5;
-      star.style.animationDuration = `${duration * 2}s`; // Set slower animation duration for each star
-      star.style.animationDelay = `${Math.random() * 2}s`; // Set random delay for each star
-    });
-  }, []);
-
+// Main Hero6 component
+const Hero6 = () => {
   return (
-    <Hero5ContainerWrapper>
-      <Hero5Container className="col-md-10 mx-auto">
+    <Hero6ContainerWrapper>
+      <Hero6Container className="col-md-10 mx-auto">
         {/* Left side with text content */}
         <LeftSide>
           <TextContent>
-            <Title>
-              Find the Perfect Gift <WinkingEmoji />
-            </Title>
+            <Title>Find the Perfect Gift</Title>
             <Subtitle>For Every Occasion</Subtitle>
             <Description>
               Discover our exclusive range of gifts to make your special moments
@@ -59,10 +46,10 @@ const Hero5 = () => {
           </Overlay>
         </MobileOverlay>
 
-        {/* Stars effect */}
-        <Stars />
-      </Hero5Container>
-    </Hero5ContainerWrapper>
+        {/* Clouds with rain effect */}
+        <Clouds />
+      </Hero6Container>
+    </Hero6ContainerWrapper>
   );
 };
 
@@ -87,55 +74,120 @@ const RotatingCube = () => {
   );
 };
 
-// Stars component to render multiple star elements
-const Stars = () => {
+// Clouds component to render moving clouds with raindrops
+const Clouds = () => {
   return (
-    <>
-      {[...Array(30)].map((_, i) => (
-        <Star key={i} className="star" />
+    <CloudContainer>
+      {[...Array(8)].map((_, i) => (
+        <CloudWithRain key={i} />
       ))}
-    </>
+    </CloudContainer>
   );
 };
 
-export default Hero5;
+// Cloud with raindrops component
+const CloudWithRain = () => {
+  return (
+    <Cloud>
+      {[...Array(5)].map((_, i) => (
+        <Raindrop key={i} />
+      ))}
+    </Cloud>
+  );
+};
 
-// Keyframes for the star blinking animation
-const blink = keyframes`
-  0%, 100% {
-    opacity: 0.2;
-    box-shadow: 0 0 2px 2px rgba(255, 255, 255, 0.3); // Weak glow at start and end
+export default Hero6;
+
+// Keyframes for the cloud movement animation
+const moveClouds = keyframes`
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+`;
+
+// Keyframes for the raindrop falling animation
+const fall = keyframes`
+  0% {
+    opacity: 0;
+    transform: translateY(-100%);
   }
   50% {
     opacity: 1;
-    box-shadow: 0 0 1px 1px rgba(255, 255, 255, 0.7); // Stronger glow at peak
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(200%); // Increase falling distance
   }
 `;
 
-// Styled component for each star
-const Star = styled.div`
-  width: 2px;
-  height: 2px;
-  background: white;
+// Styled component for each cloud
+const Cloud = styled.div`
   position: absolute;
-  top: ${() => Math.random() * 100}%;
-  left: ${() => Math.random() * 100}%;
-  animation: ${blink} 4s infinite; // Apply blink animation with slower pace
-  z-index: 1; // Set lower z-index to ensure stars are behind the 3D shape
+  top: ${() =>
+    Math.random() * 20}px; // Distribute clouds vertically within a small range
+  left: ${() => Math.random() * 90}%; // Distribute clouds horizontally
+  width: 200px; // Increase cloud width
+  height: 60px;
+  background: rgba(255, 255, 255, 0.7);
+  border-radius: 50%; // Make clouds more cloud-like
+  animation: ${moveClouds} ${() => Math.random() * 20 + 20}s linear infinite;
+  z-index: 1; // Set lower z-index to ensure clouds are behind the 3D shape
+
+  &::before,
+  &::after {
+    content: "";
+    position: absolute;
+    background: rgba(255, 255, 255, 0.7);
+    width: 150px; // Increase cloud parts width
+    height: 60px;
+    border-radius: 50%;
+  }
+
+  &::before {
+    top: -30px;
+    left: 10px;
+  }
+
+  &::after {
+    top: -30px;
+    right: 10px;
+  }
+`;
+
+// Container to hold and position the clouds
+const CloudContainer = styled.div`
+  position: absolute;
+  top: 0;
+  width: 100%;
+  height: 100px; // Ensures raindrops fall from the clouds
+  overflow: hidden;
+`;
+
+// Styled component for each raindrop
+const Raindrop = styled.div`
+  position: absolute;
+  top: 60px; // Start from the bottom of the cloud
+  left: ${() =>
+    Math.random() * 100}%; // Distribute raindrops horizontally within the cloud
+  width: 2px; // Decrease raindrop width
+  height: 15px; // Decrease raindrop height
+  background: rgba(255, 255, 255, 0.9); // Brighter, whiter raindrops
+  border-radius: 50%; // Make raindrops more circular
+  animation: ${fall} ${() => Math.random() * 2 + 2}s linear infinite;
+  z-index: 2; // Set z-index to ensure raindrops are above the clouds but below the 3D shape
 `;
 
 // Wrapper for the entire hero component
-const Hero5ContainerWrapper = styled.div`
+const Hero6ContainerWrapper = styled.div`
   display: flex;
   width: 100%;
   height: 60vh;
-  background-color: black;
+  background-color: #13265a; // Darker blue background to represent the sky
   position: relative;
   overflow: hidden;
-
-  svg {
-    font-size: 1.5rem;
-  }
 
   @media (max-width: 768px) {
     height: 100vh;
@@ -148,12 +200,12 @@ const Hero5ContainerWrapper = styled.div`
 `;
 
 // Main container for the hero component
-const Hero5Container = styled.div`
+const Hero6Container = styled.div`
   display: flex;
-  background-color: black;
+  background-color: transparent;
   position: relative;
   overflow: hidden;
-  z-index: 2; // Ensure the main container is above the stars
+  z-index: 3; // Ensure the main container is above the clouds and raindrops
 
   @media (max-width: 768px) {
     height: 100vh;
@@ -184,7 +236,7 @@ const RightSide = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 3; // Ensure the 3D shape is above the stars
+  z-index: 4; // Ensure the 3D shape is above the clouds and raindrops
 
   @media (max-width: 768px) {
     display: none;
@@ -193,7 +245,7 @@ const RightSide = styled.div`
 
 // Container for the text content
 const TextContent = styled.div`
-  max-width: 530px;
+  max-width: 500px;
 
   @media (max-width: 768px) {
     text-align: center;
@@ -207,7 +259,7 @@ const TextContent = styled.div`
 const Title = styled.h1`
   font-size: 3em;
   margin: 0;
-  color: #e2e2e2; /* Dark text color */
+  color: #ffffff; /* White text color */
   font-family: "Montserrat", sans-serif;
   font-weight: bold;
 
@@ -221,7 +273,7 @@ const Title = styled.h1`
 const Subtitle = styled.h2`
   font-size: 1.5em;
   margin: 10px 0;
-  color: #ececec; /* Gray text color */
+  color: #ffffff; /* White text color */
   font-family: "Montserrat", sans-serif;
   font-weight: normal;
 
@@ -235,7 +287,7 @@ const Subtitle = styled.h2`
 const Description = styled.p`
   font-size: 1.1em;
   margin: 20px 0;
-  color: #f5f5f5; /* Medium gray text color */
+  color: #ffffff; /* White text color */
   font-family: "Montserrat", sans-serif;
   line-height: 1.5;
 
